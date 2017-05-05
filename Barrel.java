@@ -1,14 +1,15 @@
 /******************************************************************************
- *  Compilation:  javac Barrel.java
- *  Execution:    java Barrel (runs basic testing
- *  Dependencies: image files
- *
- *  Creates a barrel object for Donkey Kong Game. Barrel can 
- * roll, fall, and stop depending on floors inputted. Used in World.java
- * 
- * Authors: Ethan Terner && Max Grove (Penn CIS110 Spring 2017)
- *
- ******************************************************************************/
+  *  Compilation:  javac Barrel.java
+  *  Execution:    java Barrel (runs basic testing)
+  *  Dependencies: image files
+  *
+  *  Creates a barrel object for Donkey Kong Game. Barrel can 
+  * roll, fall, and stop depending on floors inputted. Used in World.java
+  * 
+  * Authors: Ethan Terner, eterner, 206
+  *          Max Grove, maxgrove, 205
+  *
+  ******************************************************************************/
 public class Barrel {
     private double x;
     private double y;
@@ -16,7 +17,7 @@ public class Barrel {
     private double velY;
     private double fallVel = 0.01;
     private static final double radius = 0.025;
-    public int floorLevel = 0;
+    private int floorLevel = 0;
     private int angle = 0;
     
     /* Constructor: Creates barrel with x,y coordinates.
@@ -43,14 +44,11 @@ public class Barrel {
      * @return n/a
      */
     public static void draw4(Floor[] floors) {
-        PennDraw.picture(0.05, floors[0].getY() + floors[0].getHeight() + 
-                         radius, "barrel.png", 24, 24);
-        PennDraw.picture(0.05, floors[0].getY() + floors[0].getHeight() + 
-                         3 * radius, "barrel.png", 24, 24);
-        PennDraw.picture(0.10, floors[0].getY() + floors[0].getHeight() +
-                         radius, "barrel.png", 24, 24);
-        PennDraw.picture(0.10, floors[0].getY() + floors[0].getHeight() +
-                         3 * radius, "barrel.png", 24, 24);
+        double yHeight = floors[0].getY() + floors[0].getHeight() + radius;
+        PennDraw.picture(0.05, yHeight, "barrel.png", 24, 24);
+        PennDraw.picture(0.05, yHeight + 2 * radius, "barrel.png", 24, 24);
+        PennDraw.picture(0.10, yHeight, "barrel.png", 24, 24);
+        PennDraw.picture(0.10, yHeight + 2 * radius, "barrel.png", 24, 24);
     }
     
     /* Description: changes the x position to the right
@@ -85,6 +83,22 @@ public class Barrel {
         return y;
     }
     
+    /* Description: gets floor level of barrel
+     * @param n/a
+     * @return int floorLevel
+     */
+    public int getFloorLevel() {
+        return floorLevel;
+    }
+    
+    /* Description: sets floor level of barrel
+     * @param int f - which floorLevel to set at
+     * @return n/a
+     */
+    public void setFloorLevel(int floorLevel) {
+        this.floorLevel = floorLevel;
+    }
+    
     /* Description: returns y velocity
      * @param n/a
      * @return n/a
@@ -93,9 +107,14 @@ public class Barrel {
         return velY;
     }
     
+    /* Description: returns radius of barrels
+     * @param n/a
+     * @return double radius
+     */
     public double getRadius() {
         return radius;
     }
+    
     /* Updates barrel's y position
      * @param n/a
      * @return n/a
@@ -118,10 +137,12 @@ public class Barrel {
      */
     public void stop(Floor[] f) {
         velY = 0.0;
+        
+        //safety checking code
         y = f[floorLevel].getHeight() + f[floorLevel].getY() + radius;
     }
     
-    /* checks if barrel  is cnnected to any of the floors
+    /* checks if barrel is connected to any of the floors
      * @param array of floors
      * @return boolean true or false
      */
@@ -133,30 +154,20 @@ public class Barrel {
                 floorCollide = true;
             }
         }
-        
         return floorCollide;
     }
     
     //TESTING
     public static void main(String[] args) {
         Barrel b = new Barrel(0.5, 0.5);
-        
         PennDraw.enableAnimation(30);
+        
         while(true) {
-            
             PennDraw.clear(PennDraw.WHITE);
-            
             b.draw();
-            
-            
             b.fall();
-            
             b.updateY();
-            
             PennDraw.advance();
         }
-        
-        
     }
-    
 }

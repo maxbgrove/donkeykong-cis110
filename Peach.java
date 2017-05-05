@@ -1,16 +1,18 @@
 /******************************************************************************
- *  Compilation:  javac Peach.java
- *  Execution:    java Peach (runs basic testing
- *  Dependencies: image files
- *
- *  Creates a Peach object for Donkey Kong Game. Peach can 
- * be drawn. Used in World.java
- * 
- * Authors: Ethan Terner && Max Grove (Penn CIS110 Spring 2017)
- *
- ******************************************************************************/
+  *  Compilation:  javac Peach.java
+  *  Execution:    java Peach (runs basic testing
+  *  Dependencies: image files
+  *
+  *  Creates a Peach object for Donkey Kong Game. Peach can 
+  * be drawn. Used in World.java
+  * 
+  * Authors: Ethan Terner, eterner, 206
+  *          Max Grove, maxgrove, 205
+  *
+  ******************************************************************************/
 public class Peach {
     
+    //FIELDS
     private double x;
     private double y;
     
@@ -51,7 +53,4 @@ public class Peach {
         Peach peach = new Peach(0.25, 0.8 + 0.025);
         peach.draw();
     }
-    
-    
-    
 }

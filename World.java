@@ -8,13 +8,13 @@
   *  Runs the world of Donkey Kong Arcade. Runs instructions, then the game, 
   *  then a play-again feature.
   * 
-  * Authors: Ethan Terner && Max Grove (Penn CIS110 Spring 2017)
+  * Authors: Ethan Terner, eterner, 206
+  *          Max Grove, maxgrove, 205
   *
-  ******************************************************************************/
+  ***************************************************************************/
 public class World {
     public static void main(String[] args) {
-        
-        
+
         //DRAWING THE INSTRUCTIONS **************************************
         PennDraw.clear();
         PennDraw.setFontSize(15);
@@ -31,6 +31,7 @@ public class World {
         PennDraw.setFontBold();
         PennDraw.text(0.5, 0.1, "Press 'y' to start the game");
         
+        //waits until user presses 'y' to begin the game
         char c = 0;
         while (c != 'y') {
             if (PennDraw.hasNextKeyTyped())
@@ -44,7 +45,7 @@ public class World {
         boolean playAgain = true;
         while (playAgain) {
             
-            //create a timer to keep track of frames
+            //create timer to keep track of frames
             int timer = 0;
             int lightningTimer = 0;
             
@@ -52,7 +53,7 @@ public class World {
             int rightDir = 0;
             int leftDir = 0;
             
-            // true = right and false = left
+            // 0 = right and 1 = left
             int direction = 0;
             
             //lightning is happening?
@@ -62,13 +63,14 @@ public class World {
             boolean jumping = false;
             
             //false if not climbing, true if climbing
+            //int climb to keep track of which climbing frame
             boolean climbing = false;
             int climb = 0;
             
             //if false he is facing left, if true he is facing right
             boolean facing = false;
             
-            //Initialize floors**************************************************
+            //Initialize floors***********************************************
             Floor[] floors = new Floor[6]; //6 floors
             
             //initialize the floors alternating which edge they touch
@@ -80,9 +82,9 @@ public class World {
                     floors[i] = new Floor(0.6, 0.65 - (i - 1) * 0.15);
                 }
             }
-            //floors************************************************************
+            //floors**********************************************************
             
-            //initialize ladders************************************************
+            //initialize ladders**********************************************
             Ladder[] ladders = new Ladder[5];
             ladders[0] = new Ladder(0.4, 0.125);
             ladders[1] = new Ladder(0.7, 0.275);
@@ -98,17 +100,16 @@ public class World {
             Mario mario = new Mario(0.5, floors[5].getY() 
                                         + Floor.getHeight() + 0.025);
             Peach peach = new Peach(0.70, floors[0].getY() 
-                                        + Floor.getHeight() + 0.025);
+                                        + Floor.getHeight() + 0.035);
             DonkeyKong donkey = new DonkeyKong(0.15, floors[0].getY() 
-                                                   + Floor.getHeight() + 0.025);
+                                                   + Floor.getHeight() + 0.04);
             
-            PennDraw.enableAnimation(40);
-            
+            //CHANGE ANIMATION SPEED FPS IF NEEDED
+            PennDraw.enableAnimation(30);
             boolean hasWon = false; //create a boolean to say mario hasn't won
             
-            //Begin gameplay loop ***********************************************
+            //Begin gameplay loop ********************************************
             while(mario.isAlive() && !hasWon) {
-                
                 PennDraw.clear(PennDraw.BLACK);
                 
                 //draw 4 barrels in top corner
@@ -122,7 +123,7 @@ public class World {
                         ladders[i].draw();
                 }
                 
-                //draw donkey depending on what frame we are on
+                //draw donkey depending on what frame we are on using timer
                 if (0 <= timer && timer < 145) {
                     donkey.drawOriginal();
                 }
@@ -143,7 +144,8 @@ public class World {
                 //make sure mario is in an acceptable position before drawing
                 mario.checkPosition();
                 
-              if (mario.getY() > 0.35) {
+                //if mario is above 0.35, use pikachu images
+                if (mario.getY() > 0.35) {
                     if (direction == 1) {
                         mario.pDrawRight(rightDir);
                     } else if (direction == 2) {
@@ -151,25 +153,28 @@ public class World {
                     } else {
                         mario.pDraw(facing);
                     }
-              } else if (mario.ladderCollision(ladders) && climbing) {
+                } else if (mario.ladderCollision(ladders) && climbing) {
                     mario.drawClimbing(climb); 
                 } else if (direction == 1) {
                     mario.drawRight(rightDir);
                 } else if (direction == 2) {
                     mario.drawLeft(leftDir);
-                } else if (!(mario.floorCollision(floors)) && !(mario.ladderCollision(ladders))) {
+                } else if (!(mario.floorCollision(floors)) &&
+                           !(mario.ladderCollision(ladders))) {
                     mario.drawJump(facing);
                 } else {
                     mario.draw(facing);
                 }
                 
-                if (lightningTimer >= 45) {
+                if (lightningTimer >= 30) {
                     lightningTimer = 0;
                     lightning = false;
                 }
                 
+                //resets direction before input so mario can stand if not moving
                 direction = 0;
-                //checks for arrow pad input
+                
+                //checks for arrow pad input (w, a, s, d)
                 if (PennDraw.hasNextKeyTyped()) {
                     char dir = PennDraw.nextKeyTyped();
                     if (dir == 'a') {
@@ -212,87 +217,78 @@ public class World {
                             mario.jump();
                         }
                     } else if (dir == 's') {
-                        //if mario is in the ladder and not on the floor, move down
-                        if (mario.ladderCollision(ladders) && !mario.floorCollision(floors)) { 
+                        //if mario is in ladder and not on the floor, move down
+                        if (mario.ladderCollision(ladders) &&
+                            !mario.floorCollision(floors)) { 
                             climbing = true;
                             climb--;
                             mario.moveDown();
                         }
-                        
-                        //make this y = 0.35
                     } else if (dir == 'f' && mario.getY() > 0.35) {
                         mario.lightning(mario.getX(), mario.getY() + 0.285);
                         lightningTimer++;
                         lightning = true;
                     }
                 }
+                
+                //let lightning happen for several frames and draw lightning
                 if (lightningTimer > 0) {
                     mario.lightning(mario.getX(), mario.getY() + 0.285);
                     lightningTimer++;
                 }
                 
-                //update his y position for jumping
+                //update mario's y position for jumping
                 mario.updateY();
                 
+                //checks colliding with floors
                 int counter = 0;
                 for (int i = 0; i < floors.length; i++) {
                     if ((floors[i].collision(mario))) {
                         counter++;
-                        //System.out.println("colliding");
                     }
                 }
+              
+                //checks colliding with ladders
                 if(counter <= 0.0 && !(mario.ladderCollision(ladders))) {
-                    //System.out.println("he is not colliding with anything");
                     mario.fall();
                 } else if (mario.getVelY() < 0.0) {
                     mario.stop(floors);
                 }
                 
-                //also compare him to Peach
-                //also compare him to all the Barrels
-                
-                
+                //if timer gets to 180 (frames), add a new barrel
                 if (timer % 180 == 0) {
                     barrels.add(new Barrel(0.2, floors[0].getY() 
                                                + floors[0].getHeight() + 0.025));
-                    
-                    //System.out.println("making a barrel");
                 } else if (barrels.size() > 5) {
-                    //System.out.println("should be removing a barrel");
                     barrels.remove(0);
                 }
                 
-                
-                
+                //checks barrels collision with floors
                 int counter1 = 0;
                 while (counter1 < barrels.size()) {
                     if (barrels.get(counter1).floorCollision(floors)) {
-                        
-                        if (barrels.get(counter1).floorLevel % 2 == 0) {
+                        if (barrels.get(counter1).getFloorLevel() % 2 == 0) {
                             barrels.get(counter1).rollRight();
                         } else {
                             barrels.get(counter1).rollLeft();
                         }
                     } 
+                    
+                    //falls or stops barrels if neccesary
                     if (!(barrels.get(counter1).floorCollision(floors))) {
                         barrels.get(counter1).fall();
-                        // System.out.println("We should be falling");
                     } else if (barrels.get(counter1).getVelY() < 0.0) {
-                        barrels.get(counter1).floorLevel++;
+                        int temp =  barrels.get(counter1).getFloorLevel();
+                        barrels.get(counter1).setFloorLevel(temp + 1);
                         barrels.get(counter1).stop(floors);
-                        // System.out.println("Should be getting caught"); 
                     }
                     
-                    
                     barrels.get(counter1).updateY();
-                    
-                    counter1++; 
-                    
+                    counter1++;
                 }
-                //System.out.println(counter1);
                 
+                //removes barrel if hit by pikachu's lightning
                 int counter3 = 0;
-                
                 while(counter3 < barrels.size()) {
                     if ((barrels.get(counter3).getX() <= mario.getX() + 0.001 &&
                          mario.getX() - 0.001 <= barrels.get(counter3).getX())
@@ -303,19 +299,21 @@ public class World {
                     counter3++;
                 }
                 
-                
+                //draws all barrels
                 int counter2 = 0;
                 while (counter2 < barrels.size()) {
                     barrels.get(counter2).draw();
                     counter2++;
                 }
                 
+                //checks for mario collision with barrels
                 mario.barrelCollision(barrels);
-
+                
                 timer++;
                 if (timer >= 180) {
                     timer = 0;
                 }
+                
                 PennDraw.advance();
                 hasWon = mario.hasWon(peach); //check mario's location to peachs
             }//end gameplay loop **********************************************
@@ -347,7 +345,7 @@ public class World {
                     d = PennDraw.nextKeyTyped();
                 if (d == 'n') return;
             }
-        } //loop for play again   
+        } //close loop for play again   
     } //close main 
 } //close World.java
 

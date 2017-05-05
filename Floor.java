@@ -1,20 +1,21 @@
 /******************************************************************************
  *  Compilation:  javac Floor.java
- *  Execution:    java Floor (runs basic testing
+ *  Execution:    java Floor (runs basic testing)
  *  Dependencies: image files
  *
  *  Creates a floor object for Donkey Kong Game. Floor can be drawn and
  * compared to mario or barrels for collision detection. Used in World.java
  * 
- * Authors: Ethan Terner && Max Grove (Penn CIS110 Spring 2017)
+  * Authors: Ethan Terner, eterner, 206
+  *          Max Grove, maxgrove, 205
  *
  ******************************************************************************/
 public class Floor {
+    
     //private fields for x/ycenter
     private double x;
     private double y;
     
-        
     //static fields because every floor will be the same height
     private static double halfWidth = 0.4;
     private static double halfHeight = 0.01;
@@ -75,8 +76,7 @@ public class Floor {
     */
     public boolean collision(Mario mario) {
         return (mario.getY() - mario.getHalfHeight() <= y + halfHeight &&
-                mario.getY() >= y &&
-                mario.getX() <= x + halfWidth &&
+                mario.getY() >= y && mario.getX() <= x + halfWidth &&
                 mario.getX() >= x - halfWidth);
     }
     
@@ -86,13 +86,13 @@ public class Floor {
     */
     public boolean collision(Barrel barrel) {
         return (barrel.getY() - barrel.getRadius() <= y + halfHeight &&
-                barrel.getY() >= y &&
-                barrel.getX() <= x + halfWidth &&
+                barrel.getY() >= y && barrel.getX() <= x + halfWidth &&
                 barrel.getX() >= x - halfWidth);
     }
     
     //TESTING CODE
     public static void main(String[] args) {
+        
         // implementing with array
         Floor[] floors = new Floor[4]; //6 floors
        
@@ -108,9 +108,10 @@ public class Floor {
         }
         
         //print out the x/y floor center
-        for (int i = 0; i < floors.length; i++) {
-            //System.out.println("i:" + i + " x:" + floors[i].getX() + " y:" + floors[i].getY());
-        }
+        /*for (int i = 0; i < floors.length; i++) {
+            System.out.println("i:" + i + " x:" + floors[i].getX() +
+            " y:" + floors[i].getY());
+        }*/
         
         //draw the floors
         for (int i = 0; i < floors.length; i++) {

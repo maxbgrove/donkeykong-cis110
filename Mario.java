@@ -7,11 +7,11 @@
   * move, fall, and stop depending on floors inputted. Mario can be checked
   * compared to ladders and floors and barrels objects. Used in World.java
   * 
-  * Authors: Ethan Terner && Max Grove (Penn CIS110 Spring 2017)
+  * Authors: Ethan Terner, eterner, 206
+  *          Max Grove, maxgrove, 205
   *
   ******************************************************************************/
 public class Mario {
-    //fields
     private double x;
     private double y;
     private double velX = 0.02;
@@ -71,7 +71,7 @@ public class Mario {
         return isAlive;
     }
     
-    /** Description: increases
+    /** Description: increases x by factor of velX
       * @param n/a
       * @return n/a
       */
@@ -79,7 +79,7 @@ public class Mario {
         x += velX;
     }
     
-    /** Description: decreases mario's x
+    /** Description: decreases mario's x by velX
       * @param n/a
       * @return n/a
       */
@@ -215,14 +215,12 @@ public class Mario {
         y += velY;
     }
     
-    
     /** Description: updates marios y vel for jumping feature
       * @param n/a
       * @return n/a
       */
     public void jump() {
-        velY = jumpVel;
-        
+        velY = jumpVel; 
     }
     
     /** Description: updates marios y vel for jumping feature
@@ -240,6 +238,9 @@ public class Mario {
     public void stop(Floor[] f) {
         double min = Double.POSITIVE_INFINITY;
         double closest = 0;
+        
+        //finds minimum between y and f[i].getY()
+        //closest = closest of f[i].getY()
         for (int i = 0; i < f.length; i++) {
             double temp = Math.abs(y - f[i].getY());
             if (temp < min) {
@@ -251,7 +252,7 @@ public class Mario {
         velY = 0.0;
     }
     
-    /** Description:checks if marios bottom is connected to any of the floors
+    /** Description: checks if marios bottom is connected to any of the floors
       * by calling the floor collision detection
       * @param array of floors
       * @return boolean true or false
@@ -264,11 +265,10 @@ public class Mario {
                 floorCollide = true;
             }
         }
-        
         return floorCollide;
     }
     
-    /* checks if marios x location is within a ladder
+    /* Descritption: checks if marios x location is within a ladder
      * input: ladder
      * output: boolean true or false
      */
@@ -276,7 +276,6 @@ public class Mario {
         for (int i = 0; i < l.length; i++) {
             if(l[i].getX() - 0.015 < x && x < l[i].getX() + 0.015) {
                 if (l[i].getY() - 0.075 < y && y < l[i].getY() + 0.1) {
-                    //System.out.println("laddercollision is true");
                     return true;
                 }
             }
@@ -284,28 +283,29 @@ public class Mario {
         return false;
     }
     
-    /* Moves mario up
-     * 
+    /* Description: Moves mario up
+     * @param n/a
+     * @return n/a
      */
     public void moveUp() {
         y += 0.015;
     }
     
-    /* Moves mario down
-     * 
+    /* Description: Moves mario down
+     * @param n/a
+     * @return n/a
      */
     public void moveDown() {
         y -= 0.015;
     }
     
-    /* function to check if mario is equivalent to peach's
+    /* Description: function to check if mario is equivalent to peach's
      * Input: Peach peach
      * Output: boolean
      */
     public boolean hasWon(Peach peach) {
         if (peach.getX() < x + 0.01 && x - 0.01 < peach.getX()) {
-            if (peach.getY() < y + 0.01 && y - 0.01 < peach.getY()) {
-                //System.out.println("hiya");
+            if (peach.getY() < y + 0.015 && y - 0.015 < peach.getY()) {
                 return true;
             }
         }
@@ -314,11 +314,12 @@ public class Mario {
     
     /* Description: Checks if mario has collided with any of the barrels and if
      * he has set isAlive to false
-     * @param LinkedList<Barrel>
+     * @param LinkedList<Barrel> b
      * @return n/a
      */
     public void barrelCollision(LinkedList<Barrel> b) {
         int counter = 0;
+        
         while (counter < b.size()) {
             if (b.get(counter).getX() < x + 0.02 &&
                 x - 0.02 < b.get(counter).getX()) {
@@ -339,34 +340,32 @@ public class Mario {
     public void checkPosition() {
         if (x > 0.97) {
             x = 0.97;
-        }
-        if (x < 0.03) {
+        } else if (x < 0.03) {
             x = 0.03;
         }
+        
         if (y < -0.05) {
             isAlive = false;
         }
     }
    
+    //TESTING
     public static void main(String[] args) {
-        
-        
         Floor[] floor = new Floor[2];
         floor[0] = new Floor(0.6, 0.25);
         floor[1] = new Floor(0.4, 0.1);
         
-        Mario mario = new Mario(0.5, floor[0].getY() + floor[0].getHeight() + 0.024); //start at 0.11 for good position
+        Mario mario = new Mario(0.5, floor[0].getY() + floor[0].getHeight()
+                                    + 0.024); //start at 0.11 for good position
         
         PennDraw.enableAnimation(30);
         
         while(true) { //later make a boolean for if the game is running
-            
             PennDraw.clear(PennDraw.WHITE);
             
             for (int i = 0; i < floor.length; i++ ) {
                 floor[i].draw();
             }
-            //mario.draw();
             
             //checks for left or right movement
             if (PennDraw.hasNextKeyTyped()) {
@@ -383,7 +382,6 @@ public class Mario {
                 }
             }
             
-            
             int counter = 0;
             for (int i = 0; i < floor.length; i++) {
                 if ((floor[i].collision(mario))) {
@@ -399,7 +397,6 @@ public class Mario {
             }
             
             mario.updateY();
-            
             PennDraw.advance();
         }
     }
