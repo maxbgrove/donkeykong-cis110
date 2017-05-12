@@ -1,7 +1,5 @@
 /**********************************************************************
- *  project2.txt template                                                   
- *  Project Part 2
- **********************************************************************/
+
 
 PARTNER 1 (whose PennKey would come first in alphabetical order)
 Partner 1 Name: Ethan Terner
@@ -222,15 +220,3 @@ Compile all files. open World.java. In the interactions pane, type "java World"
  **********************************************************************/
 Initially we struggled to check for collisions between mario and the floors 
     objects without causing problems other aspects of the game.
-
-
-
-/**********************************************************************
- *  List any other comments here. Feel free to provide any feedback   
- *  on how much you learned from doing the project, and whether    
- *  you enjoyed doing it.                                             
- **********************************************************************/
-    This was really so much fun. We really enjoyed partner coding and thought 
-    that it was helpful to have another perspective on the problems that arose. 
-    
-
