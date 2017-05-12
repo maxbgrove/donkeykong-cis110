@@ -148,8 +148,8 @@ OPEN PROBLEMS: on some computers, if mario tries to jump onto a ladder,
  *  sure these instructions are thorough and correct. 
  **********************************************************************/
 
-Compile all files. open World.java. In the interactions pane, type "java World"
-    without quotes. An instructions pane will open when you run the program.
+Compile all files. Run the command: "java World" without quotes. An instructions pane will open
+when you run the program, assuming you have the latest version of Java installed.
     The instructions included are: Press 'a' to move Mario character left,
     'd' to move right, 'w' to jump or climb ladders, and 's' to move down
     ladders. Once Mario character reaches the third floor Level, he will turn
